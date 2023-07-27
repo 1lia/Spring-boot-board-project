@@ -30,6 +30,16 @@ public class BoardController {
         }
     }
 
+    @PutMapping("/{boardId}")
+    public ResponseEntity<Void> updateBoard(@PathVariable long boardId , @RequestBody BoardReq boardReq){
+        try {
+            boardService.updateBoard(boardId , boardReq);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 
 }

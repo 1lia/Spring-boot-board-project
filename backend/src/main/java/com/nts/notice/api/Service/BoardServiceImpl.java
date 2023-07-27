@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +20,7 @@ public class BoardServiceImpl implements BoardService{
     private UserRepository userRepository;
     private TagRepository tagRepository;
 
+    @Autowired
     public BoardServiceImpl(BoardRepository boardRepository, UserRepository userRepository, TagRepository tagRepository) {
         this.boardRepository = boardRepository;
         this.userRepository = userRepository;
@@ -30,8 +29,6 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public long insertBoard(BoardReq boardReq) {
-//        List<Tag> tags = new ArrayList<>();
-
         Board board = Board.builder()
                 .title(boardReq.getTitle())
                 .user(userRepository.findbyId(boardReq.getUserId()))
@@ -39,15 +36,27 @@ public class BoardServiceImpl implements BoardService{
                 .hit(0)
                 .likeCount(0)
                 .commentCount(0)
-//                .tags(tags)
                 .build();
         boardRepository.save(board);
-        System.out.println(board.getBoardId());
-
-        for (String item : boardReq.getTags()) {
-            Tag tag = new Tag(board , item);
-            tagRepository.save(tag);
-        }
+        updateTag(board , boardReq.getTags());
         return board.getBoardId();
+    }
+
+    @Override
+    public void updateBoard(long boardId, BoardReq boardReq) {
+        Board board = boardRepository.findById(boardId);
+        board.setTitle(boardReq.getTitle());
+        board.setContent(boardReq.getContent());
+        tagRepository.deleteTagByBoardId(board.getBoardId());
+        updateTag(board , boardReq.getTags());
+    }
+
+    public void updateTag(Board board , List<String> tagString){
+        List<Tag> tags = new ArrayList<>();
+        for (String item : tagString) {
+            tags.add(new Tag(board , item));
+        }
+        board.setTags(tags);
+        boardRepository.save(board);
     }
 }

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 
+import static com.nts.notice.db.entity.QTag.tag;
+
 @Repository
 public class TagRepositoryImpl implements TagRepository{
     private final EntityManager em;
@@ -30,5 +32,10 @@ public class TagRepositoryImpl implements TagRepository{
     @Override
     public void delete(Tag tag) {
         em.remove(tag);
+    }
+
+    @Override
+    public void deleteTagByBoardId(long BoardId) {
+        query.delete(tag).where(tag.board.boardId.eq(BoardId)).execute();
     }
 }
