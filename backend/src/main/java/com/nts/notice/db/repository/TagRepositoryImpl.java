@@ -1,11 +1,14 @@
 package com.nts.notice.db.repository;
 
+import com.nts.notice.db.entity.Board;
 import com.nts.notice.db.entity.Tag;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+
+import java.util.List;
 
 import static com.nts.notice.db.entity.QTag.tag;
 
@@ -37,5 +40,12 @@ public class TagRepositoryImpl implements TagRepository{
     @Override
     public void deleteTagByBoardId(long BoardId) {
         query.delete(tag).where(tag.board.boardId.eq(BoardId)).execute();
+    }
+    @Override
+    public List<String> findKeywordByBoardId(long boardId) {
+        return query.select(tag.keyword)
+                .from(tag)
+                .where(tag.board.boardId.eq(boardId))
+                .fetch();
     }
 }

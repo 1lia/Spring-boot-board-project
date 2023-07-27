@@ -1,6 +1,7 @@
 package com.nts.notice.api.Service;
 
 import com.nts.notice.api.request.BoardReq;
+import com.nts.notice.api.response.BoardDetailRes;
 import com.nts.notice.api.response.BoardRes;
 import com.nts.notice.db.entity.Board;
 import com.nts.notice.db.entity.Tag;
@@ -65,6 +66,14 @@ public class BoardServiceImpl implements BoardService{
     public List<BoardRes> selectAllBoard(Map<String, Object> params) {
         return boardRepository.findAll(params);
     }
+
+    @Override
+    public BoardDetailRes selectDetailBoard(long boardId) {
+        BoardDetailRes boardDetailRes = boardRepository.findDetailById(boardId);
+        boardDetailRes.setTags(tagRepository.findKeywordByBoardId(boardId));
+        return boardDetailRes;
+    }
+
 
     public void updateTag(Board board , List<String> tagString){
         List<Tag> tags = new ArrayList<>();

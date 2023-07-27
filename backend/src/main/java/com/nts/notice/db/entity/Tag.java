@@ -20,16 +20,16 @@ public class Tag {
     @Column(name = "tag_id")
     private Long tagId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "board_id" , updatable = false)
     private Board board;
 
-    @Column(name = "name", length = 20)
-    private String name;
+    @Column(name = "keyword", length = 20)
+    private String keyword;
 
     @Builder
-    public Tag(Board board, String name) {
+    public Tag(Board board, String keyword) {
         this.board = board;
-        this.name = name;
+        this.keyword = keyword;
     }
 }

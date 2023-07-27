@@ -74,4 +74,11 @@ class BoardControllerTest {
         map.put("page" , 1);
         boardService.selectAllBoard(map);
     }
+
+    @Test
+    @Transactional
+    @DisplayName("게시판 상세 조회")
+    void selectDetailBoard() {
+        boardService.selectDetailBoard(18);
+    }
 }

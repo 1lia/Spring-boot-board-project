@@ -3,6 +3,7 @@ package com.nts.notice.api.Controller;
 
 import com.nts.notice.api.Service.BoardService;
 import com.nts.notice.api.request.BoardReq;
+import com.nts.notice.api.response.BoardDetailRes;
 import com.nts.notice.api.response.BoardRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -55,6 +56,15 @@ public class BoardController {
     public ResponseEntity<List<BoardRes>> selectAllBoard(@RequestParam Map<String, Object> params){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(boardService.selectAllBoard(params));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @GetMapping("/{boardId}")
+    public ResponseEntity<BoardDetailRes> selectAllBoard(@PathVariable long boardId){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(boardService.selectDetailBoard(boardId));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
