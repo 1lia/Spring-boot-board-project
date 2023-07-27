@@ -22,7 +22,7 @@ public class BoardController {
     public BoardController(BoardService boardService) {
         this.boardService = boardService;
     }
-
+//  게시판 작성
     @PostMapping
     public ResponseEntity<Long> insertBoard(@RequestBody BoardReq boardReq){
         try {
@@ -31,7 +31,7 @@ public class BoardController {
             throw new RuntimeException(e);
         }
     }
-
+//  게시판 수정
     @PutMapping("/{boardId}")
     public ResponseEntity<Void> updateBoard(@PathVariable long boardId , @RequestBody BoardReq boardReq){
         try {
@@ -41,7 +41,7 @@ public class BoardController {
             throw new RuntimeException(e);
         }
     }
-
+//  게시판 삭제
     @DeleteMapping("/{boardId}")
     public ResponseEntity<Void> deleteBoard(@PathVariable long boardId){
         try {
@@ -51,7 +51,7 @@ public class BoardController {
             throw new RuntimeException(e);
         }
     }
-
+//  게시판 목록 조회
     @GetMapping
     public ResponseEntity<List<BoardRes>> selectAllBoard(@RequestParam Map<String, Object> params){
         try {
@@ -61,6 +61,7 @@ public class BoardController {
         }
     }
 
+//  게시판 상세 조회
     @GetMapping("/{boardId}")
     public ResponseEntity<BoardDetailRes> selectAllBoard(@PathVariable long boardId){
         try {
@@ -69,7 +70,4 @@ public class BoardController {
             throw new RuntimeException(e);
         }
     }
-
-
-
 }

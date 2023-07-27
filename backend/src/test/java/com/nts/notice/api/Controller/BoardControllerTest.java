@@ -27,7 +27,6 @@ class BoardControllerTest {
     @Autowired
     private BoardRepository boardRepository;
 
-
     @Test
     @Transactional
     @DisplayName("게시판 작성")

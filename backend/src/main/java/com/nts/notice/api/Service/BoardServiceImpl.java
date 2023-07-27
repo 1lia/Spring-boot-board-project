@@ -69,11 +69,16 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public BoardDetailRes selectDetailBoard(long boardId) {
+        updateHit(boardId);
         BoardDetailRes boardDetailRes = boardRepository.findDetailById(boardId);
         boardDetailRes.setTags(tagRepository.findKeywordByBoardId(boardId));
         return boardDetailRes;
     }
 
+    public void updateHit(long boardId){
+        Board board = boardRepository.findById(boardId);
+        board.setHit(board.getHit() + 1);
+    }
 
     public void updateTag(Board board , List<String> tagString){
         List<Tag> tags = new ArrayList<>();
