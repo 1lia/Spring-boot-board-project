@@ -3,6 +3,7 @@ package com.nts.notice.api.Controller;
 
 import com.nts.notice.api.Service.BoardService;
 import com.nts.notice.api.request.BoardReq;
+import com.nts.notice.api.response.BoardRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,25 @@ public class BoardController {
         try {
             boardService.updateBoard(boardId , boardReq);
             return ResponseEntity.status(HttpStatus.OK).body(null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @DeleteMapping("/{boardId}")
+    public ResponseEntity<Void> deleteBoard(@PathVariable long boardId){
+        try {
+            boardService.deleteBoard(boardId);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<List<BoardRes>> selectAllBoard(@RequestParam Map<String, Object> params){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(boardService.selectAllBoard(params));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

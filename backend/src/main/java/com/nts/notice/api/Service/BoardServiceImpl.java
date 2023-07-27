@@ -1,6 +1,7 @@
 package com.nts.notice.api.Service;
 
 import com.nts.notice.api.request.BoardReq;
+import com.nts.notice.api.response.BoardRes;
 import com.nts.notice.db.entity.Board;
 import com.nts.notice.db.entity.Tag;
 import com.nts.notice.db.repository.BoardRepository;
@@ -12,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -49,6 +52,18 @@ public class BoardServiceImpl implements BoardService{
         board.setContent(boardReq.getContent());
         tagRepository.deleteTagByBoardId(board.getBoardId());
         updateTag(board , boardReq.getTags());
+    }
+
+    @Override
+    public void deleteBoard(long boardId) {
+        Board board = boardRepository.findById(boardId);
+        tagRepository.deleteTagByBoardId(boardId);
+        boardRepository.delete(board);
+    }
+
+    @Override
+    public List<BoardRes> selectAllBoard(Map<String, Object> params) {
+        return boardRepository.findAll(params);
     }
 
     public void updateTag(Board board , List<String> tagString){

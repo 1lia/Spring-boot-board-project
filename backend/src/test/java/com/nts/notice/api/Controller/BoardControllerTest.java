@@ -11,7 +11,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -52,6 +54,24 @@ class BoardControllerTest {
         tags.add("수정태그2");
         tags.add("수정태그3");
         boardReq.setTags(tags);
-        boardService.updateBoard(12 , boardReq);
+        boardService.updateBoard(14 , boardReq);
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("게시판 삭제")
+    void deleteBoard() {
+        boardService.deleteBoard(14 );
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("게시판 목록 조회")
+    void selectAllBoard() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("type" , "해시태그");
+        map.put("keyword" , "태그1");
+        map.put("page" , 1);
+        boardService.selectAllBoard(map);
     }
 }
