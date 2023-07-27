@@ -1,6 +1,8 @@
 package com.nts.notice.db.entity;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -10,6 +12,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "notice")
@@ -39,4 +42,15 @@ public class Notice {
 
     @Column(name = "hit")
     private Integer hit;
+
+    @Builder
+    public Notice(User user, String title, String content, LocalDateTime createTime, Integer commentCount, Integer likeCount, Integer hit) {
+        this.user = user;
+        this.title = title;
+        this.content = content;
+        this.createTime = createTime;
+        this.commentCount = commentCount;
+        this.likeCount = likeCount;
+        this.hit = hit;
+    }
 }

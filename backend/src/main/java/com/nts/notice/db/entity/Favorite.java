@@ -1,6 +1,8 @@
 package com.nts.notice.db.entity;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -9,6 +11,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "favorite")
@@ -27,4 +30,11 @@ public class Favorite {
 
     @Column(name = "is_favorite")
     private Byte is_favorite;
+
+    @Builder
+    public Favorite(User user, Notice notice, Byte is_favorite) {
+        this.user = user;
+        this.notice = notice;
+        this.is_favorite = is_favorite;
+    }
 }
