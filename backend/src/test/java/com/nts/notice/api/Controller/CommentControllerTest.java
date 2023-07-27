@@ -36,4 +36,11 @@ class CommentControllerTest {
     void deleteComment() {
         commentService.deleteComment(2);
     }
+
+    @Test
+    @DisplayName("댓글 삭제")
+    @Transactional
+    void selectComment() {
+        commentService.selectComment(13,0);
+    }
 }

@@ -28,8 +28,8 @@ public class Comment {
     @JoinColumn(name = "board_id")
     private Board board;
 
-    @Column(name = "comment", length = 255)
-    private String comment;
+    @Column(name = "text", length = 255)
+    private String text;
 
     @Column(name = "deleted")
     private Byte deleted;
@@ -41,10 +41,10 @@ public class Comment {
     private Integer depth;
 
     @Builder
-    public Comment(User user, Board board, String comment, Byte deleted, Integer parent, Integer depth) {
+    public Comment(User user, Board board, String text, Byte deleted, Integer parent, Integer depth) {
         this.user = user;
         this.board = board;
-        this.comment = comment;
+        this.text = text;
         this.deleted = deleted;
         this.parent = parent;
         this.depth = depth;

@@ -90,13 +90,13 @@ public class BoardRepositoryImpl implements BoardRepository {
     @Override
     public BoardDetailRes findDetailById(long boardId) {
         return query.select(Projections.constructor(BoardDetailRes.class ,
-                user.userId,
-                user.name,
-                board.title,
-                board.createTime,
-                board.commentCount,
-                board.hit,
-                board.likeCount
+                        user.userId,
+                        user.name,
+                        board.title,
+                        board.createTime,
+                        board.commentCount,
+                        board.hit,
+                        board.likeCount
                 ))
                 .from(board)
                 .where(board.boardId.eq(boardId))
