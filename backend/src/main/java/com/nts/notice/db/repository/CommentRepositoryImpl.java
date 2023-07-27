@@ -17,7 +17,7 @@ public class CommentRepositoryImpl implements CommentRepository{
     }
 
     @Override
-    public Comment findbyId(int commentId) {
+    public Comment findbyId(long commentId) {
         return em.find(Comment.class , commentId);
     }
 

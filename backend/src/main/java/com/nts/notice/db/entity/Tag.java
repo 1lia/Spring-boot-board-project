@@ -20,16 +20,16 @@ public class Tag {
     @Column(name = "tag_id")
     private Long tagId;
 
-    @ManyToOne
-    @JoinColumn(name = "notice_id" , insertable = false , updatable = false)
-    private Notice notice;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id" , updatable = false)
+    private Board board;
 
     @Column(name = "name", length = 20)
     private String name;
 
     @Builder
-    public Tag(Notice notice, String name) {
-        this.notice = notice;
+    public Tag(Board board, String name) {
+        this.board = board;
         this.name = name;
     }
 }

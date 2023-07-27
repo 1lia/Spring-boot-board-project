@@ -19,7 +19,7 @@ public class UserRepositoryImpl implements UserRepository{
     }
 
     @Override
-    public User findbyId(int userId) {
+    public User findbyId(long userId) {
         return em.find(User.class , userId);
     }
 

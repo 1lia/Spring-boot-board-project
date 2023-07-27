@@ -4,7 +4,7 @@ import com.nts.notice.db.entity.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 public interface UserRepository {
-    User findbyId(int userId);
+    User findbyId(long userId);
     void save(User user);
     void delete(User user);
 

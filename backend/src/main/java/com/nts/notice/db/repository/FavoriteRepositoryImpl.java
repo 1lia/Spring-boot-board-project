@@ -19,7 +19,7 @@ public class FavoriteRepositoryImpl implements FavoriteRepository{
     }
 
     @Override
-    public Favorite findById(int favoriteId) {
+    public Favorite findById(long favoriteId) {
         return em.find(Favorite.class , favoriteId);
     }
 

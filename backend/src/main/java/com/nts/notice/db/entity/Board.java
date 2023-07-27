@@ -9,21 +9,26 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter
 @NoArgsConstructor
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "notice")
-public class Notice {
+@Table(name = "board")
+public class Board {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "notice_id")
-    private Long noticeId;
+    @Column(name = "board_id")
+    private Long boardId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id" , insertable = false , updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "board" , cascade = CascadeType.PERSIST)
+    private List<Tag> tags = new ArrayList<>();
 
     @Column(name = "title")
     private String title;
@@ -44,8 +49,9 @@ public class Notice {
     private Integer hit;
 
     @Builder
-    public Notice(User user, String title, String content, LocalDateTime createTime, Integer commentCount, Integer likeCount, Integer hit) {
+    public Board(User user, List<Tag> tags, String title, String content, LocalDateTime createTime, Integer commentCount, Integer likeCount, Integer hit) {
         this.user = user;
+        this.tags = tags;
         this.title = title;
         this.content = content;
         this.createTime = createTime;

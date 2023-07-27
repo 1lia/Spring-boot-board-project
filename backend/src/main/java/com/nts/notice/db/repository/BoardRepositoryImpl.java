@@ -1,6 +1,6 @@
 package com.nts.notice.db.repository;
 
-import com.nts.notice.db.entity.Notice;
+import com.nts.notice.db.entity.Board;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -8,28 +8,28 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 
 @Repository
-public class NoticeRepositoryImpl implements NoticeRepository{
+public class BoardRepositoryImpl implements BoardRepository {
     private final EntityManager em;
     private final JPAQueryFactory query;
 
     @Autowired
-    public NoticeRepositoryImpl(EntityManager em) {
+    public BoardRepositoryImpl(EntityManager em) {
         this.em = em;
         this.query = new JPAQueryFactory(em);
     }
 
     @Override
-    public Notice findById(int noticeId) {
-        return em.find(Notice.class , noticeId);
+    public Board findById(long boardId) {
+        return em.find(Board.class , boardId);
     }
 
     @Override
-    public void save(Notice notice) {
-        em.persist(notice);
+    public void save(Board board) {
+        em.persist(board);
     }
 
     @Override
-    public void delete(Notice notice) {
-        em.remove(notice);
+    public void delete(Board board) {
+        em.remove(board);
     }
 }

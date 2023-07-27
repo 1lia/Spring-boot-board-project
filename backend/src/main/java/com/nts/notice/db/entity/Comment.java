@@ -20,13 +20,13 @@ public class Comment {
     @Column(name = "comment_id")
     private Long commentId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id" , insertable = false , updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "notice_id" , insertable = false , updatable = false)
-    private Notice notice;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id")
+    private Board board;
 
     @Column(name = "comment", length = 255)
     private String comment;
@@ -41,9 +41,9 @@ public class Comment {
     private Integer depth;
 
     @Builder
-    public Comment(User user, Notice notice, String comment, Byte deleted, Integer parent, Integer depth) {
+    public Comment(User user, Board board, String comment, Byte deleted, Integer parent, Integer depth) {
         this.user = user;
-        this.notice = notice;
+        this.board = board;
         this.comment = comment;
         this.deleted = deleted;
         this.parent = parent;

@@ -20,21 +20,21 @@ public class Favorite {
     @Column(name = "favorite_id")
     private Long favoriteId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id" , insertable = false , updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "notice_id" , insertable = false , updatable = false)
-    private Notice notice;
+    @JoinColumn(name = "board_id")
+    private Board board;
 
     @Column(name = "is_favorite")
     private Byte is_favorite;
 
     @Builder
-    public Favorite(User user, Notice notice, Byte is_favorite) {
+    public Favorite(User user, Board board, Byte is_favorite) {
         this.user = user;
-        this.notice = notice;
+        this.board = board;
         this.is_favorite = is_favorite;
     }
 }

@@ -18,7 +18,7 @@ public class TagRepositoryImpl implements TagRepository{
         this.query = new JPAQueryFactory(em);
     }
     @Override
-    public Tag findById(int tagId) {
+    public Tag findById(long tagId) {
         return em.find(Tag.class , tagId);
     }
 
