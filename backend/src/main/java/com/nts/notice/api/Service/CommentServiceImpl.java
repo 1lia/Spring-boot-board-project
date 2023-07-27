@@ -7,8 +7,10 @@ import com.nts.notice.db.repository.CommentRepository;
 import com.nts.notice.db.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class CommentServiceImpl implements CommentService{
     private CommentRepository commentRepository;
     private UserRepository userRepository;
@@ -29,5 +31,11 @@ public class CommentServiceImpl implements CommentService{
                 .comment(commentReq.getComment())
                 .build();
         commentRepository.save(comment);
+    }
+
+    @Override
+    public void deleteComment(int CommentId) {
+        Comment comment = commentRepository.findbyId(CommentId);
+        commentRepository.delete(comment);
     }
 }

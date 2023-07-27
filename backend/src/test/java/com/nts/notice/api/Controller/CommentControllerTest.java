@@ -22,11 +22,18 @@ class CommentControllerTest {
     @Test
     @DisplayName("댓글 쓰기")
     @Transactional
-    void insertBoard() {
+    void insertComment() {
         CommentReq commentReq = new CommentReq();
         commentReq.setBoardId(13);
         commentReq.setUserId(1);
         commentReq.setComment("댓글 내용입니다");
         commentService.insertComment(commentReq);
+    }
+
+    @Test
+    @DisplayName("댓글 삭제")
+    @Transactional
+    void deleteComment() {
+        commentService.deleteComment(2);
     }
 }
