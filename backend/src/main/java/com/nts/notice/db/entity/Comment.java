@@ -48,12 +48,13 @@ public class Comment {
     private Integer depth;
 
     @Builder
-    public Comment(Board board, String writer, String password, String text, Integer deleted, Integer parent, Integer depth) {
+    public Comment(Board board, String writer, String password, String text, Integer deleted, LocalDateTime createTime, Integer parent, Integer depth) {
         this.board = board;
         this.writer = writer;
         this.password = password;
         this.text = text;
         this.deleted = deleted;
+        this.createTime = createTime;
         this.parent = parent;
         this.depth = depth;
     }

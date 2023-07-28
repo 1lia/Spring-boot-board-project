@@ -2,6 +2,7 @@ package com.nts.notice.api.Service;
 
 import com.nts.notice.api.request.CommentReq;
 import com.nts.notice.api.response.CommentRes;
+import com.nts.notice.db.entity.Board;
 import com.nts.notice.db.entity.Comment;
 import com.nts.notice.db.repository.BoardRepository;
 import com.nts.notice.db.repository.CommentRepository;
@@ -9,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,12 +30,16 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public void insertComment(CommentReq commentReq) {
+        Board board = boardRepository.findById(commentReq.getBoardId());
+        board.setCommentCount(board.getCommentCount() + 1);
+
         Comment comment = Comment.builder()
                 .writer(commentReq.getWriter())
                 .password(commentReq.getPassword())
-                .board(boardRepository.findById(commentReq.getBoardId()))
+                .board(board)
                 .text(commentReq.getComment())
                 .deleted(0)
+                .createTime(LocalDateTime.now())
                 .build();
         commentRepository.save(comment);
     }
@@ -48,7 +56,7 @@ public class CommentServiceImpl implements CommentService{
         List<Comment> comments = commentRepository.findByBoardId(boardId , page);
         List<CommentRes> commentRes = new ArrayList<>();
         for (Comment comment : comments ) {
-            commentRes.add(new CommentRes(comment.getWriter() , comment.getText() , comment.getCreateTime()));
+            commentRes.add(new CommentRes(comment.getWriter() , comment.getText() , comment.getCreateTime().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))));
         }
         return commentRes;
     }

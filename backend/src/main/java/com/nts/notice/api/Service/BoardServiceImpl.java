@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +40,7 @@ public class BoardServiceImpl implements BoardService{
                 .hit(0)
                 .likeCount(0)
                 .commentCount(0)
+                .createTime(LocalDateTime.now())
                 .build();
         boardRepository.save(board);
         updateTag(board , boardReq.getTags());
@@ -65,12 +68,20 @@ public class BoardServiceImpl implements BoardService{
     public List<BoardRes> selectAllBoard(Map<String, String> params) {
         List<Board> boards = boardRepository.findAll(params);
         List<BoardRes> boardRes = new ArrayList<>();
+        LocalDateTime now = LocalDateTime.now().minusDays(3);
         for (Board board : boards) {
+            String time = null;
+            LocalDateTime createtime = board.getCreateTime();
+            if(createtime.isAfter(now)) {
+                time = createtime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)) + "  [now]";
+            } else{
+                time = createtime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));
+            }
             boardRes.add(new BoardRes(
                     board.getBoardId(),
                     board.getTitle(),
                     board.getWriter(),
-                    board.getCreateTime(),
+                    time,
                     board.getCommentCount(),
                     board.getHit(),
                     board.getLikeCount()
@@ -88,7 +99,7 @@ public class BoardServiceImpl implements BoardService{
         BoardDetailRes boardDetailRes = new BoardDetailRes(
                 board.getWriter(),
                 board.getTitle(),
-                board.getCreateTime(),
+                board.getCreateTime().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)),
                 board.getCommentCount(),
                 board.getHit(),
                 board.getLikeCount(),

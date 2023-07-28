@@ -12,7 +12,7 @@ public class BoardRes {
     long boardId;
     String title;
     String name;
-    LocalDateTime createTime;
+    String createTime;
     int commentCount;
     int hit;
     int likeCount;

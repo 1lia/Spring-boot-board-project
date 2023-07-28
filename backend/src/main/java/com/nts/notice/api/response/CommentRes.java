@@ -10,5 +10,5 @@ import java.time.LocalDateTime;
 public class CommentRes {
     String writer;
     String text;
-    LocalDateTime createTime;
+    String createTime;
 }
