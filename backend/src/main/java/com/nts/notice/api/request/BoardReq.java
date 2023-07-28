@@ -7,7 +7,8 @@ import java.util.List;
 
 @Getter @Setter
 public class BoardReq {
-    long userId;
+    String writer;
+    String password;
     String title;
     String content;
     List<String> tags;

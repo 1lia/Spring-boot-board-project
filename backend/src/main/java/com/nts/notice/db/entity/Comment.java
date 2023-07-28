@@ -16,17 +16,20 @@ import javax.persistence.*;
 @DynamicUpdate
 @Table(name = "comment")
 public class Comment {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
     private Long commentId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board;
+
+    @Column(name = "writer")
+    private String writer;
+
+    @Column(name = "password")
+    private String password;
 
     @Column(name = "text", length = 255)
     private String text;
@@ -41,9 +44,10 @@ public class Comment {
     private Integer depth;
 
     @Builder
-    public Comment(User user, Board board, String text, Byte deleted, Integer parent, Integer depth) {
-        this.user = user;
+    public Comment(Board board, String writer, String password, String text, Byte deleted, Integer parent, Integer depth) {
         this.board = board;
+        this.writer = writer;
+        this.password = password;
         this.text = text;
         this.deleted = deleted;
         this.parent = parent;

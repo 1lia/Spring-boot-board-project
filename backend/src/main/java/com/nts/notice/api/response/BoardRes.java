@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 public class BoardRes {
-    private long boardId;
+    long boardId;
     String title;
     String name;
     LocalDateTime createTime;

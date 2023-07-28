@@ -5,7 +5,6 @@ import com.nts.notice.api.response.CommentRes;
 import com.nts.notice.db.entity.Comment;
 import com.nts.notice.db.repository.BoardRepository;
 import com.nts.notice.db.repository.CommentRepository;
-import com.nts.notice.db.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,20 +15,17 @@ import java.util.List;
 @Transactional
 public class CommentServiceImpl implements CommentService{
     private CommentRepository commentRepository;
-    private UserRepository userRepository;
     private BoardRepository boardRepository;
 
     @Autowired
-    public CommentServiceImpl(CommentRepository commentRepository, UserRepository userRepository, BoardRepository boardRepository) {
+    public CommentServiceImpl(CommentRepository commentRepository, BoardRepository boardRepository) {
         this.commentRepository = commentRepository;
-        this.userRepository = userRepository;
         this.boardRepository = boardRepository;
     }
 
     @Override
     public void insertComment(CommentReq commentReq) {
         Comment comment = Comment.builder()
-                .user(userRepository.findbyId(commentReq.getUserId()))
                 .board(boardRepository.findById(commentReq.getBoardId()))
                 .text(commentReq.getComment())
                 .build();
@@ -44,6 +40,7 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public List<CommentRes> selectComment(long boardId, int page) {
-        return commentRepository.findByBoardId(boardId , page);
+        List<Comment> comments = commentRepository.findByBoardId(boardId , page);
+        return null;
     }
 }

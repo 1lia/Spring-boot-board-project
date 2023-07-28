@@ -11,6 +11,5 @@ public interface BoardRepository {
     Board findById(long boardId);
     void save(Board board);
     void delete(Board board);
-    List<BoardRes> findAll(Map<String , Object> params);
-    BoardDetailRes findDetailById(long boardId);
+    List<Board> findAll(Map<String , String> params);
 }

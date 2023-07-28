@@ -8,6 +8,5 @@ import java.util.List;
 public interface CommentService {
     void insertComment(CommentReq commentReq);
     void deleteComment(int CommentId);
-
     List<CommentRes> selectComment(long boardId , int page);
 }

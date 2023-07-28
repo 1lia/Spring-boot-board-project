@@ -53,7 +53,7 @@ public class BoardController {
     }
 //  게시판 목록 조회
     @GetMapping
-    public ResponseEntity<List<BoardRes>> selectAllBoard(@RequestParam Map<String, Object> params){
+    public ResponseEntity<List<BoardRes>> selectAllBoard(@RequestParam Map<String, String> params){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(boardService.selectAllBoard(params));
         } catch (Exception e) {

@@ -21,7 +21,7 @@ public class Tag {
     private Long tagId;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "board_id" , updatable = false)
+    @JoinColumn(name = "board_id")
     private Board board;
 
     @Column(name = "keyword", length = 20)

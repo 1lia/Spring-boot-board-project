@@ -9,6 +9,5 @@ public interface CommentRepository {
     Comment findbyId(long commentId);
     void save(Comment comment);
     void delete(Comment comment);
-
-    List<CommentRes> findByBoardId(long boardId , int page);
+    List<Comment> findByBoardId(long boardId , int page);
 }

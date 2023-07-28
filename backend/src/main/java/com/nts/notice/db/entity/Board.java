@@ -23,15 +23,17 @@ public class Board {
     @Column(name = "board_id")
     private Long boardId;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    private User user;
-
     @OneToMany(mappedBy = "board" , cascade = CascadeType.PERSIST)
     private List<Tag> tags = new ArrayList<>();
 
     @Column(name = "title")
     private String title;
+
+    @Column(name = "writer")
+    private String writer;
+
+    @Column(name = "password")
+    private String password;
 
     @Column(name = "content", length = 4000)
     private String content;
@@ -49,10 +51,11 @@ public class Board {
     private Integer hit;
 
     @Builder
-    public Board(User user, List<Tag> tags, String title, String content, LocalDateTime createTime, Integer commentCount, Integer likeCount, Integer hit) {
-        this.user = user;
+    public Board(List<Tag> tags, String title, String writer, String password, String content, LocalDateTime createTime, Integer commentCount, Integer likeCount, Integer hit) {
         this.tags = tags;
         this.title = title;
+        this.writer = writer;
+        this.password = password;
         this.content = content;
         this.createTime = createTime;
         this.commentCount = commentCount;

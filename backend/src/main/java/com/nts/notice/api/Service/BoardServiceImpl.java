@@ -7,35 +7,33 @@ import com.nts.notice.db.entity.Board;
 import com.nts.notice.db.entity.Tag;
 import com.nts.notice.db.repository.BoardRepository;
 import com.nts.notice.db.repository.TagRepository;
-import com.nts.notice.db.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @Service
 @Transactional
 public class BoardServiceImpl implements BoardService{
     private BoardRepository boardRepository;
-    private UserRepository userRepository;
     private TagRepository tagRepository;
 
     @Autowired
-    public BoardServiceImpl(BoardRepository boardRepository, UserRepository userRepository, TagRepository tagRepository) {
+    public BoardServiceImpl(BoardRepository boardRepository,TagRepository tagRepository) {
         this.boardRepository = boardRepository;
-        this.userRepository = userRepository;
         this.tagRepository = tagRepository;
     }
 
     @Override
     public long insertBoard(BoardReq boardReq) {
         Board board = Board.builder()
+                .writer(boardReq.getWriter())
+                .password(boardReq.getPassword())
                 .title(boardReq.getTitle())
-                .user(userRepository.findbyId(boardReq.getUserId()))
                 .content(boardReq.getContent())
                 .hit(0)
                 .likeCount(0)
@@ -49,9 +47,10 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public void updateBoard(long boardId, BoardReq boardReq) {
         Board board = boardRepository.findById(boardId);
+        board.setWriter(boardReq.getWriter());
         board.setTitle(boardReq.getTitle());
         board.setContent(boardReq.getContent());
-        tagRepository.deleteTagByBoardId(board.getBoardId());
+        tagRepository.deleteTagByBoardId(boardId);
         updateTag(board , boardReq.getTags());
     }
 
@@ -63,21 +62,39 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public List<BoardRes> selectAllBoard(Map<String, Object> params) {
-        return boardRepository.findAll(params);
+    public List<BoardRes> selectAllBoard(Map<String, String> params) {
+        List<Board> boards = boardRepository.findAll(params);
+        List<BoardRes> boardRes = new ArrayList<>();
+        for (Board board : boards) {
+            boardRes.add(new BoardRes(
+                    board.getBoardId(),
+                    board.getTitle(),
+                    board.getWriter(),
+                    board.getCreateTime(),
+                    board.getCommentCount(),
+                    board.getHit(),
+                    board.getLikeCount()
+                    ));
+        }
+        return boardRes;
     }
 
     @Override
     public BoardDetailRes selectDetailBoard(long boardId) {
-        updateHit(boardId);
-        BoardDetailRes boardDetailRes = boardRepository.findDetailById(boardId);
-        boardDetailRes.setTags(tagRepository.findKeywordByBoardId(boardId));
-        return boardDetailRes;
-    }
-
-    public void updateHit(long boardId){
         Board board = boardRepository.findById(boardId);
         board.setHit(board.getHit() + 1);
+        List<String> tags = tagRepository.findKeywordByBoardId(boardId);
+
+        BoardDetailRes boardDetailRes = new BoardDetailRes(
+                board.getWriter(),
+                board.getTitle(),
+                board.getCreateTime(),
+                board.getCommentCount(),
+                board.getHit(),
+                board.getLikeCount(),
+                tags
+        );
+        return boardDetailRes;
     }
 
     public void updateTag(Board board , List<String> tagString){

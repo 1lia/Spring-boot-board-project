@@ -1,10 +1,6 @@
 package com.nts.notice.db.repository;
 
-import com.nts.notice.api.response.BoardDetailRes;
-import com.nts.notice.api.response.CommentRes;
 import com.nts.notice.db.entity.Comment;
-import com.nts.notice.db.entity.QComment;
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +9,6 @@ import java.util.List;
 
 import static com.nts.notice.db.entity.QBoard.board;
 import static com.nts.notice.db.entity.QComment.comment;
-import static com.nts.notice.db.entity.QUser.user;
 
 @Repository
 public class CommentRepositoryImpl implements CommentRepository{
@@ -41,14 +36,11 @@ public class CommentRepositoryImpl implements CommentRepository{
     }
 
     @Override
-    public List<CommentRes> findByBoardId(long boardId, int page) {
-        return query.select(Projections.constructor(CommentRes.class ,
-                user.name,
-                comment.text))
+    public List<Comment> findByBoardId(long boardId, int page) {
+        return query.select(comment)
                 .from(comment)
                 .join(comment.board, board)
                 .where(board.boardId.eq(boardId))
-                .join(comment.user , user)
                 .orderBy(comment.commentId.desc())
                 .fetch();
     }

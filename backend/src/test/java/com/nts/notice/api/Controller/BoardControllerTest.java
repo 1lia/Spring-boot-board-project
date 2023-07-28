@@ -67,10 +67,10 @@ class BoardControllerTest {
     @Transactional
     @DisplayName("게시판 목록 조회")
     void selectAllBoard() {
-        Map<String, Object> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("type" , "해시태그");
         map.put("keyword" , "태그1");
-        map.put("page" , 1);
+        map.put("page" , "1");
         boardService.selectAllBoard(map);
     }
 

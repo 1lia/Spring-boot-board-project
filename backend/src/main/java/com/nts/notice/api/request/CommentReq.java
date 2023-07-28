@@ -5,7 +5,8 @@ import lombok.Setter;
 
 @Getter @Setter
 public class CommentReq {
-    long userId;
     long boardId;
+    String writer;
+    String password;
     String comment;
 }

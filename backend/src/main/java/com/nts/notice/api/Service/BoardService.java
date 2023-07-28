@@ -11,6 +11,6 @@ public interface BoardService {
     long insertBoard(BoardReq boardReq);
     void updateBoard(long boardId , BoardReq boardReq);
     void deleteBoard(long boardId);
-    List<BoardRes> selectAllBoard(Map<String, Object> params);
+    List<BoardRes> selectAllBoard(Map<String, String> params);
     BoardDetailRes selectDetailBoard(long boardId);
 }
