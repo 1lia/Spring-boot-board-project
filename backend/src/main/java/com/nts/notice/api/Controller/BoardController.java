@@ -5,6 +5,7 @@ import com.nts.notice.api.Service.BoardService;
 import com.nts.notice.api.request.BoardReq;
 import com.nts.notice.api.response.BoardDetailRes;
 import com.nts.notice.api.response.BoardRes;
+import com.nts.notice.api.response.CommentRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,10 +63,20 @@ public class BoardController {
     }
 
 //  게시판 상세 조회
-    @GetMapping("/{boardId}")
-    public ResponseEntity<BoardDetailRes> selectAllBoard(@PathVariable long boardId){
+    @GetMapping("/detail")
+    public ResponseEntity<BoardDetailRes> selectAllBoard(@RequestParam long boardId){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(boardService.selectDetailBoard(boardId));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+//   비밀번호 확인
+    @GetMapping("/check")
+    public ResponseEntity<Integer> checkPassword(@RequestParam long boardId , @RequestParam String password){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(boardService.checkPassword(boardId , password));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

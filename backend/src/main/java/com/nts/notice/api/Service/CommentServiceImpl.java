@@ -6,6 +6,7 @@ import com.nts.notice.db.entity.Board;
 import com.nts.notice.db.entity.Comment;
 import com.nts.notice.db.repository.BoardRepository;
 import com.nts.notice.db.repository.CommentRepository;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,10 +33,11 @@ public class CommentServiceImpl implements CommentService{
     public void insertComment(CommentReq commentReq) {
         Board board = boardRepository.findById(commentReq.getBoardId());
         board.setCommentCount(board.getCommentCount() + 1);
+        String password = BCrypt.hashpw(commentReq.getPassword(),BCrypt.gensalt());
 
         Comment comment = Comment.builder()
                 .writer(commentReq.getWriter())
-                .password(commentReq.getPassword())
+                .password(password)
                 .board(board)
                 .text(commentReq.getComment())
                 .deleted(0)
@@ -56,8 +58,18 @@ public class CommentServiceImpl implements CommentService{
         List<Comment> comments = commentRepository.findByBoardId(boardId , page);
         List<CommentRes> commentRes = new ArrayList<>();
         for (Comment comment : comments ) {
-            commentRes.add(new CommentRes(comment.getWriter() , comment.getText() , comment.getCreateTime().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))));
+            commentRes.add(new CommentRes(comment.getCommentId() , comment.getWriter() , comment.getText() , comment.getCreateTime().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))));
         }
         return commentRes;
+    }
+
+    @Override
+    public int checkPassword(long commentId, String password) {
+        Comment comment = commentRepository.findbyId(commentId);
+        if(BCrypt.checkpw(password , comment.getPassword())){
+            return 1;
+        } else{
+            return 0;
+        }
     }
 }

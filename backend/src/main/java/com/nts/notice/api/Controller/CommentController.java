@@ -51,5 +51,13 @@ public class CommentController {
         }
     }
 
+    @GetMapping("/check")
+    public ResponseEntity<Integer> checkPasswords(@RequestParam long commentId , @RequestParam String password){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(commentService.checkPassword(commentId , password));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

@@ -7,6 +7,7 @@ import com.nts.notice.db.entity.Board;
 import com.nts.notice.db.entity.Tag;
 import com.nts.notice.db.repository.BoardRepository;
 import com.nts.notice.db.repository.TagRepository;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,9 +33,12 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public long insertBoard(BoardReq boardReq) {
+//       비밀번호 암호화
+        String password = BCrypt.hashpw(boardReq.getPassword(),BCrypt.gensalt());
+
         Board board = Board.builder()
                 .writer(boardReq.getWriter())
-                .password(boardReq.getPassword())
+                .password(password)
                 .title(boardReq.getTitle())
                 .content(boardReq.getContent())
                 .hit(0)
@@ -106,6 +110,16 @@ public class BoardServiceImpl implements BoardService{
                 tags
         );
         return boardDetailRes;
+    }
+
+    @Override
+    public Integer checkPassword(long boardId , String password) {
+        Board board = boardRepository.findById(boardId);
+        if(BCrypt.checkpw(password , board.getPassword())){
+            return 1;
+        } else{
+            return 0;
+        }
     }
 
     public void updateTag(Board board , List<String> tagString){
