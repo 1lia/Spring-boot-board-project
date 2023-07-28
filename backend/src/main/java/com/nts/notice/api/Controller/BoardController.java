@@ -81,4 +81,17 @@ public class BoardController {
             throw new RuntimeException(e);
         }
     }
+
+    @PutMapping("/like")
+    public ResponseEntity<Void> updateBoardLike(@RequestParam long boardId , @RequestParam int like){
+        try {
+            boardService.updateBoardLike(boardId , like);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
 }

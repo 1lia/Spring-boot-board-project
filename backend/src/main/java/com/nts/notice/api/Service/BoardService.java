@@ -13,6 +13,7 @@ public interface BoardService {
     void deleteBoard(long boardId);
     List<BoardRes> selectAllBoard(Map<String, String> params);
     BoardDetailRes selectDetailBoard(long boardId);
-
     Integer checkPassword(long BoardId , String password);
+
+    void updateBoardLike(long boardId , int like);
 }

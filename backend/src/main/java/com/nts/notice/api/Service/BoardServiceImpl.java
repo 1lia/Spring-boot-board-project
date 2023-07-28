@@ -122,6 +122,12 @@ public class BoardServiceImpl implements BoardService{
         }
     }
 
+    @Override
+    public void updateBoardLike(long boardId, int like) {
+        Board board = boardRepository.findById(boardId);
+        board.setLikeCount(board.getLikeCount() + like);
+    }
+
     public void updateTag(Board board , List<String> tagString){
         List<Tag> tags = new ArrayList<>();
         for (String item : tagString) {
