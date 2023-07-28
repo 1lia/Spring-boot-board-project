@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,8 +27,11 @@ public class CommentServiceImpl implements CommentService{
     @Override
     public void insertComment(CommentReq commentReq) {
         Comment comment = Comment.builder()
+                .writer(commentReq.getWriter())
+                .password(commentReq.getPassword())
                 .board(boardRepository.findById(commentReq.getBoardId()))
                 .text(commentReq.getComment())
+                .deleted(0)
                 .build();
         commentRepository.save(comment);
     }
@@ -35,12 +39,17 @@ public class CommentServiceImpl implements CommentService{
     @Override
     public void deleteComment(int CommentId) {
         Comment comment = commentRepository.findbyId(CommentId);
+        comment.setDeleted(1);
         comment.setText("삭제된 댓글입니다.");
     }
 
     @Override
     public List<CommentRes> selectComment(long boardId, int page) {
         List<Comment> comments = commentRepository.findByBoardId(boardId , page);
-        return null;
+        List<CommentRes> commentRes = new ArrayList<>();
+        for (Comment comment : comments ) {
+            commentRes.add(new CommentRes(comment.getWriter() , comment.getText() , comment.getCreateTime()));
+        }
+        return commentRes;
     }
 }

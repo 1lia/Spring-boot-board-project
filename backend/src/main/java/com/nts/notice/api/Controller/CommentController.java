@@ -41,6 +41,7 @@ public class CommentController {
         }
     }
 
+//   댓글 조회
     @GetMapping("")
     public ResponseEntity<List<CommentRes>> selectComment(@RequestParam long boardId , @RequestParam int page){
         try {

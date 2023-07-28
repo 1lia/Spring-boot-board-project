@@ -41,6 +41,8 @@ public class CommentRepositoryImpl implements CommentRepository{
                 .from(comment)
                 .join(comment.board, board)
                 .where(board.boardId.eq(boardId))
+                .offset(page * 5)
+                .limit(5)
                 .orderBy(comment.commentId.desc())
                 .fetch();
     }

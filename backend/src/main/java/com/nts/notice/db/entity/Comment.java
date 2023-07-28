@@ -8,6 +8,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
@@ -35,7 +36,10 @@ public class Comment {
     private String text;
 
     @Column(name = "deleted")
-    private Byte deleted;
+    private Integer deleted;
+
+    @Column(name = "create_time")
+    private LocalDateTime createTime;
 
     @Column(name = "parent")
     private Integer parent;
@@ -44,7 +48,7 @@ public class Comment {
     private Integer depth;
 
     @Builder
-    public Comment(Board board, String writer, String password, String text, Byte deleted, Integer parent, Integer depth) {
+    public Comment(Board board, String writer, String password, String text, Integer deleted, Integer parent, Integer depth) {
         this.board = board;
         this.writer = writer;
         this.password = password;
