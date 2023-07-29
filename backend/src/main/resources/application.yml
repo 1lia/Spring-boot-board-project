@@ -23,3 +23,6 @@ logging:
     com.nts.notice: debug
     org.hibernate.SQL: debug
     org.hibernate.type.descriptor.sql.BasicBinder: trace
+
+server:
+  port: 80

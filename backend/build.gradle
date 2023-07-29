@@ -48,8 +48,15 @@ dependencies {
 //	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'com.auth0:java-jwt:4.4.0'
 
+//	querydsl
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+//	비밀번호 암호화
+	implementation 'org.mindrot:jbcrypt:0.4'
+
+
+
 }
 
 tasks.named('test') {
