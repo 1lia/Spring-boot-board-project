@@ -68,6 +68,14 @@ public class BoardRepositoryImpl implements BoardRepository {
         }
     }
 
+    @Override
+    public long count() {
+        return query.select(
+                board.count())
+                .from(board)
+                .fetchOne();
+    }
+
     private BooleanExpression selectFilter(String type , String word){
         if(!type.equals("")){
             if(type.equals("제목")){

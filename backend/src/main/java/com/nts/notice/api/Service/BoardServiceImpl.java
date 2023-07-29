@@ -1,11 +1,13 @@
 package com.nts.notice.api.Service;
 
 import com.nts.notice.api.request.BoardReq;
+import com.nts.notice.api.response.CountRes;
 import com.nts.notice.api.response.BoardDetailRes;
 import com.nts.notice.api.response.BoardRes;
 import com.nts.notice.db.entity.Board;
 import com.nts.notice.db.entity.Tag;
 import com.nts.notice.db.repository.BoardRepository;
+import com.nts.notice.db.repository.CommentRepository;
 import com.nts.notice.db.repository.TagRepository;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +25,13 @@ import java.util.Map;
 @Transactional
 public class BoardServiceImpl implements BoardService{
     private BoardRepository boardRepository;
+    private CommentRepository commentRepository;
     private TagRepository tagRepository;
 
     @Autowired
-    public BoardServiceImpl(BoardRepository boardRepository,TagRepository tagRepository) {
+    public BoardServiceImpl(BoardRepository boardRepository, CommentRepository commentRepository, TagRepository tagRepository) {
         this.boardRepository = boardRepository;
+        this.commentRepository = commentRepository;
         this.tagRepository = tagRepository;
     }
 
@@ -127,6 +131,13 @@ public class BoardServiceImpl implements BoardService{
     public void updateBoardLike(long boardId, int like) {
         Board board = boardRepository.findById(boardId);
         board.setLikeCount(board.getLikeCount() + like);
+    }
+
+    @Override
+    public CountRes checkCount() {
+        long boardCount = boardRepository.count();
+        long commentCount = commentRepository.count();
+        return new CountRes(boardCount ,  commentCount);
     }
 
     public void updateTag(Board board , List<String> tagString){

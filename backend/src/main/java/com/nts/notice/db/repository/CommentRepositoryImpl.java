@@ -46,4 +46,12 @@ public class CommentRepositoryImpl implements CommentRepository{
                 .orderBy(comment.commentId.desc())
                 .fetch();
     }
+
+    @Override
+    public long count() {
+        return query.select(comment.count())
+                .from(comment)
+                .fetchOne();
+    }
+
 }

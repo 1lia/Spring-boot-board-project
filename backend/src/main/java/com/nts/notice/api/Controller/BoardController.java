@@ -3,9 +3,9 @@ package com.nts.notice.api.Controller;
 
 import com.nts.notice.api.Service.BoardService;
 import com.nts.notice.api.request.BoardReq;
+import com.nts.notice.api.response.CountRes;
 import com.nts.notice.api.response.BoardDetailRes;
 import com.nts.notice.api.response.BoardRes;
-import com.nts.notice.api.response.CommentRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -93,6 +93,12 @@ public class BoardController {
         }
     }
 
-
-
+    @GetMapping("/count")
+    public ResponseEntity<CountRes> Count(){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(boardService.checkCount());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

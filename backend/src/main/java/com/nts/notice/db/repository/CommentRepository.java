@@ -10,4 +10,5 @@ public interface CommentRepository {
     void save(Comment comment);
     void delete(Comment comment);
     List<Comment> findByBoardId(long boardId , int page);
+    long count();
 }
