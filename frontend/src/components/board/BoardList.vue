@@ -1,6 +1,7 @@
 <template>
   <div class="board-list">
     <h2>게시판 목록</h2>
+    <div>총 게시글 개수 : {{ counts.boardCount }} 총 댓글 개수 : {{ counts.commentCount }}</div>
     <b-table :items="boards" :fields="fields" :hover="true" @row-clicked="moveDetail"> </b-table>
 
     <div class="d-flex justify-content-end">
@@ -17,6 +18,7 @@ export default {
     return {
       page: 0,
       boards: [],
+      counts: {},
       fields: [
         { key: "title", label: "제목" },
         { key: "name", label: "작성자" },
@@ -30,9 +32,20 @@ export default {
 
   created() {
     this.getBoardList();
+    this.getCount();
   },
 
   methods: {
+    getCount() {
+      http
+        .get("/boards/count", {})
+        .then(({ data }) => {
+          this.counts = data;
+        })
+        .catch((error) => {
+          console.error("GET 요청 에러 : ", error);
+        });
+    },
     getBoardList() {
       http
         .get("/boards", {
