@@ -103,6 +103,7 @@ public class BoardServiceImpl implements BoardService{
         BoardDetailRes boardDetailRes = new BoardDetailRes(
                 board.getWriter(),
                 board.getTitle(),
+                board.getContent(),
                 board.getCreateTime().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)),
                 board.getCommentCount(),
                 board.getHit(),

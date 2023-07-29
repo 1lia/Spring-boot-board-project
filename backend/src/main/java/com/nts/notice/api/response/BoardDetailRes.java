@@ -10,6 +10,7 @@ import java.util.List;
 public class BoardDetailRes {
     String writer;
     String title;
+    String content;
     String createTime;
     int commentCount;
     int hit;
