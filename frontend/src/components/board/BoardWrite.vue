@@ -3,29 +3,31 @@
     <h2>게시글 작성</h2>
     <form @submit.prevent="createBoard">
       <div class="form-group">
-        <label for="writer">작성자</label>
+        <label for="writer"><strong>작성자</strong></label>
         <input type="text" class="form-control" id="writer" v-model="board.writer" />
       </div>
       <div class="form-group">
-        <label for="password">비밀번호</label>
+        <label for="password"><strong>비밀번호</strong></label>
         <input type="password" class="form-control" id="password" v-model="board.password" />
       </div>
       <div class="form-group">
-        <label for="title">제목</label>
+        <label for="title"><strong>제목</strong></label>
         <input type="text" class="form-control" id="title" v-model="board.title" />
       </div>
       <div class="form-group">
-        <label for="content">내용</label>
+        <label for="content"><strong>내용</strong></label>
         <textarea class="form-control" id="content" v-model="board.content"></textarea>
       </div>
       <b-row rows="1"></b-row>
       <b-row>
         <b-col v-for="i in 5" :key="i" cols="2">
-          <label :for="'tag' + i">태그 {{ i }}</label>
+          <label :for="'tag' + i"
+            ><strong>태그 {{ i }}</strong></label
+          >
           <b-form-input :id="'tag' + i" v-model="tags[i - 1]"></b-form-input>
         </b-col>
       </b-row>
-      <button type="submit" class="btn btn-primary" @click="createPost">글 작성</button>
+      <button type="submit" class="btn btn-primary">글 작성</button>
     </form>
   </div>
 </template>
@@ -47,7 +49,7 @@ export default {
     };
   },
   methods: {
-    createPost() {
+    createBoard() {
       this.board.tags = this.tags.filter((tag) => tag.trim() !== "");
       http
         .post("/boards", this.board)

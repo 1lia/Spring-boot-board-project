@@ -15,6 +15,7 @@ export default {
   name: "BoardList",
   data() {
     return {
+      page: 0,
       boards: [],
       fields: [
         { key: "title", label: "제목" },
@@ -38,7 +39,7 @@ export default {
           params: {
             type: "해시태그",
             word: "",
-            page: 0,
+            page: this.page,
           },
         })
         .then(({ data }) => {

@@ -18,7 +18,7 @@ const routes = [
         component: () => import("@/components/board/BoardList"),
       },
       {
-        path: "detail",
+        path: "detail/:boardId",
         name: "boardDetail",
         component: () => import("@/components/board/BoardDetail"),
       },
@@ -26,11 +26,6 @@ const routes = [
         path: "write",
         name: "boardWrite",
         component: () => import("@/components/board/BoardWrite"),
-      },
-      {
-        path: "modify",
-        name: "boardModify",
-        component: () => import("@/components/board/BoardModify"),
       },
     ],
   },

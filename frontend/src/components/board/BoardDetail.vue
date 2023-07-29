@@ -1,13 +1,40 @@
 <template>
   <div>
-    <h2>{{ this.board.title }}</h2>
-    <p><strong>작성자:</strong> {{ this.board.writer }}</p>
-    <p><strong>제목:</strong>{{ this.board.title }}</p>
-    <p><strong>내용:</strong>{{ this.board.content }}</p>
-    <p><strong>댓글 수:</strong> {{ this.board.commentCount }}</p>
-    <p><strong>좋아요 수:</strong> {{ this.board.likeCount }}</p>
-    <p><strong>조회 수:</strong> {{ this.board.hit }}</p>
-    <p><strong>작성 시간:</strong> {{ this.board.createTime }}</p>
+    <h2>게시글 상세</h2>
+    <div>
+      조회수 : {{ this.board.hit }} 좋아요 수 : {{ this.board.likeCount }} 작성시간 :
+      {{ this.board.createTime }}
+    </div>
+    <form @submit.prevent="modifyBoard">
+      <div class="form-group">
+        <label for="writer"><strong>작성자</strong></label>
+        <input type="text" class="form-control" id="writer" v-model="board.writer" required />
+      </div>
+      <div class="form-group">
+        <label for="password"><strong>비밀번호</strong></label>
+        <input type="password" class="form-control" id="password" v-model="password" required />
+      </div>
+      <div class="form-group">
+        <label for="title"><strong>제목</strong></label>
+        <input type="text" class="form-control" id="title" v-model="board.title" required />
+      </div>
+      <div class="form-group">
+        <label for="content"><strong>내용</strong></label>
+        <textarea class="form-control" id="content" v-model="board.content" required></textarea>
+      </div>
+      <b-row rows="1"></b-row>
+      <b-row>
+        <b-col v-for="i in 5" :key="i" cols="2">
+          <label :for="'tag' + i"
+            ><strong>태그 {{ i }}</strong></label
+          >
+          <b-form-input :id="'tag' + i" v-model="tags[i - 1]"></b-form-input>
+        </b-col>
+      </b-row>
+      <button v-if="check === 1" type="submit" class="btn btn-primary">글 수정</button>
+    </form>
+    <button v-if="check === 1" class="btn btn-danger" @click="deleteBoard">글 삭제</button>
+    <button v-if="check === 0" class="btn btn-primary" @click="checkPassword">비밀번호 확인</button>
   </div>
 </template>
 
@@ -17,12 +44,17 @@ export default {
   name: "BoardDetail",
   data() {
     return {
+      tags: [],
+      boardId: null,
+      check: 0,
+      password: null,
       board: {},
     };
   },
 
   created() {
-    this.getBoardDetail(this.$route.params.boardId);
+    this.boardId = this.$route.params.boardId;
+    this.getBoardDetail(this.boardId);
   },
 
   methods: {
@@ -35,6 +67,62 @@ export default {
         })
         .then(({ data }) => {
           this.board = data;
+          this.tags = this.board.tags;
+        })
+        .catch((error) => {
+          console.error("GET 요청 에러 : ", error);
+        });
+    },
+
+    modifyBoard() {
+      this.board.tags = this.tags.filter((tag) => tag.trim() !== "");
+      http
+        .put(`/boards/${this.boardId}`, {
+          writer: this.board.writer,
+          title: this.board.title,
+          content: this.board.content,
+          tags: this.board.tags,
+        })
+        .then(() => {
+          alert("글이 수정되었습니다.");
+          this.$router.push(`/`);
+        })
+        .catch((error) => {
+          console.error("PUT 요청 에러 : ", error);
+        });
+    },
+
+    deleteBoard() {
+      http
+        .delete(`/boards/${this.boardId}`)
+        .then(() => {
+          alert("글이 삭제되었습니다.");
+          this.$router.push("/");
+        })
+        .catch((error) => {
+          console.error("DELETE 요청 에러 : ", error);
+        });
+    },
+
+    checkPassword() {
+      if (!this.password) {
+        alert("비밀번호를 입력해주세요");
+        return;
+      }
+      http
+        .get("/boards/check", {
+          params: {
+            boardId: this.boardId,
+            password: this.password,
+          },
+        })
+        .then(({ data }) => {
+          this.check = data;
+          if (data == 1) {
+            alert("성공");
+          } else {
+            alert("비밀번호가 틀렸습니다");
+          }
         })
         .catch((error) => {
           console.error("GET 요청 에러 : ", error);
