@@ -1,6 +1,11 @@
 <template>
   <div>
-    <h2>게시글 상세</h2>
+    <div>
+      <h2>게시글 상세</h2>
+      <button class="btn btn-primary" @click="updateLike(1)">좋아요</button>
+      <button class="btn btn-danger" @click="updateLike(-1)">싫어요</button>
+    </div>
+
     <div>
       조회수 : {{ this.board.hit }} 좋아요 수 : {{ this.board.likeCount }} 작성시간 :
       {{ this.board.createTime }}
@@ -8,7 +13,14 @@
     <form @submit.prevent="modifyBoard">
       <div class="form-group">
         <label for="writer"><strong>작성자</strong></label>
-        <input type="text" class="form-control" id="writer" v-model="board.writer" required />
+        <input
+          type="text"
+          class="form-control"
+          id="writer"
+          v-model="board.writer"
+          :disabled="!check"
+          required
+        />
       </div>
       <div class="form-group">
         <label for="password"><strong>비밀번호</strong></label>
@@ -16,11 +28,24 @@
       </div>
       <div class="form-group">
         <label for="title"><strong>제목</strong></label>
-        <input type="text" class="form-control" id="title" v-model="board.title" required />
+        <input
+          type="text"
+          class="form-control"
+          id="title"
+          v-model="board.title"
+          :disabled="!check"
+          required
+        />
       </div>
       <div class="form-group">
         <label for="content"><strong>내용</strong></label>
-        <textarea class="form-control" id="content" v-model="board.content" required></textarea>
+        <textarea
+          class="form-control"
+          id="content"
+          v-model="board.content"
+          :disabled="!check"
+          required
+        ></textarea>
       </div>
       <b-row rows="1"></b-row>
       <b-row>
@@ -28,16 +53,16 @@
           <label :for="'tag' + i"
             ><strong>태그 {{ i }}</strong></label
           >
-          <b-form-input :id="'tag' + i" v-model="tags[i - 1]"></b-form-input>
+          <b-form-input :id="'tag' + i" v-model="tags[i - 1]" :disabled="!check"></b-form-input>
         </b-col>
       </b-row>
-      <button v-if="check === 1" type="submit" class="btn btn-primary">글 수정</button>
+      <button v-if="check" type="submit" class="btn btn-primary">글 수정</button>
     </form>
-    <button v-if="check === 1" class="btn btn-danger" @click="deleteBoard">글 삭제</button>
-    <button v-if="check === 0" class="btn btn-primary" @click="checkPassword">비밀번호 확인</button>
+    <button v-if="check" class="btn btn-danger" @click="deleteBoard">글 삭제</button>
+    <button v-if="!check" class="btn btn-primary" @click="checkPassword">비밀번호 확인</button>
     <comment-write :boardId="boardId" @getCommentList="getCommentList(boardId)"></comment-write>
     <comment-list :comments="comments" @getCommentList="getCommentList(boardId)"></comment-list>
-    <b-button v-if="comments.length % 5 == 0" @click="getCommentListAdd(boardId)">더보기</b-button>
+    <b-button v-if="hasmorecomments" @click="getCommentListAdd(boardId)">더보기</b-button>
   </div>
 </template>
 
@@ -54,10 +79,11 @@ export default {
       page: 0,
       tags: [],
       boardId: null,
-      check: 0,
+      check: false,
       password: null,
       board: {},
       comments: [],
+      hasmorecomments: true,
     };
   },
 
@@ -127,8 +153,8 @@ export default {
           },
         })
         .then(({ data }) => {
-          this.check = data;
           if (data == 1) {
+            this.check = true;
             alert("성공");
           } else {
             alert("비밀번호가 틀렸습니다");
@@ -151,6 +177,9 @@ export default {
         })
         .then(({ data }) => {
           this.comments = data;
+          if (this.comments.length < 5) {
+            this.hasmorecomments = false;
+          }
         })
         .catch((error) => {
           console.error("GET 요청 에러 : ", error);
@@ -168,9 +197,27 @@ export default {
         })
         .then(({ data }) => {
           this.comments = this.comments.concat(data);
+          if (this.comments.length < 5 * (this.page + 1)) {
+            this.hasmorecomments = false;
+          }
         })
         .catch((error) => {
           console.error("GET 요청 에러 : ", error);
+        });
+    },
+    updateLike(like) {
+      console.log(this.boardId);
+      http
+        .put("/boards/like", {
+          boardId: this.boardId,
+          like: like,
+        })
+        .then(() => {
+          this.board.likeCount += like;
+          alert("반영되었습니다");
+        })
+        .catch((error) => {
+          console.error("PUT 요청 에러 : ", error);
         });
     },
   },

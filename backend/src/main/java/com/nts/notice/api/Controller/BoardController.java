@@ -3,6 +3,7 @@ package com.nts.notice.api.Controller;
 
 import com.nts.notice.api.Service.BoardService;
 import com.nts.notice.api.request.BoardReq;
+import com.nts.notice.api.request.LikeReq;
 import com.nts.notice.api.response.CountRes;
 import com.nts.notice.api.response.BoardDetailRes;
 import com.nts.notice.api.response.BoardRes;
@@ -84,9 +85,9 @@ public class BoardController {
     }
 
     @PutMapping("/like")
-    public ResponseEntity<Void> updateBoardLike(@RequestParam long boardId , @RequestParam int like){
+    public ResponseEntity<Void> updateBoardLike(@RequestBody LikeReq likeReq){
         try {
-            boardService.updateBoardLike(boardId , like);
+            boardService.updateBoardLike(likeReq);
             return ResponseEntity.status(HttpStatus.OK).body(null);
         } catch (Exception e) {
             throw new RuntimeException(e);

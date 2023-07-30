@@ -1,6 +1,7 @@
 package com.nts.notice.api.Service;
 
 import com.nts.notice.api.request.BoardReq;
+import com.nts.notice.api.request.LikeReq;
 import com.nts.notice.api.response.CountRes;
 import com.nts.notice.api.response.BoardDetailRes;
 import com.nts.notice.api.response.BoardRes;
@@ -128,9 +129,10 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public void updateBoardLike(long boardId, int like) {
-        Board board = boardRepository.findById(boardId);
-        board.setLikeCount(board.getLikeCount() + like);
+    public void updateBoardLike(LikeReq likeReq) {
+        System.out.println(likeReq.getBoardId() + likeReq.getLike());
+        Board board = boardRepository.findById(likeReq.getBoardId());
+        board.setLikeCount(board.getLikeCount() + likeReq.getLike());
     }
 
     @Override
