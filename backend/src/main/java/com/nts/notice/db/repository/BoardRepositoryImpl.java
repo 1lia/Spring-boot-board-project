@@ -69,11 +69,23 @@ public class BoardRepositoryImpl implements BoardRepository {
     }
 
     @Override
-    public long count() {
-        return query.select(
-                board.count())
-                .from(board)
-                .fetchOne();
+    public long count(Map<String , String> params) {
+        StringBuilder stringBuilder = new StringBuilder();
+        String type = params.get("type");
+        String word = stringBuilder.append('%').append(params.get("word")).append('%').toString();
+
+        if(type.equals("해시태그")){
+            return query.select(board.countDistinct())
+                    .from(board)
+                    .join(board.tags , tag)
+                    .where(tag.keyword.like(word))
+                    .fetchOne();
+        } else{
+            return query.select(board.count())
+                    .from(board)
+                    .where(selectFilter(type , word))
+                    .fetchOne();
+        }
     }
 
     private BooleanExpression selectFilter(String type , String word){

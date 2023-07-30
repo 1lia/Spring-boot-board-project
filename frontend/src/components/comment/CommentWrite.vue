@@ -20,7 +20,9 @@
         <label for="content">댓글 내용</label>
         <textarea class="form-control" id="content" v-model="comment.text" required></textarea>
       </div>
-      <button type="submit" class="btn btn-primary">댓글 작성</button>
+      <div class="d-flex justify-content-end">
+        <button type="submit" class="btn btn-primary">댓글 작성</button>
+      </div>
     </form>
   </div>
 </template>

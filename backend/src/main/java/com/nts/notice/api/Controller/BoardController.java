@@ -94,9 +94,9 @@ public class BoardController {
     }
 
     @GetMapping("/count")
-    public ResponseEntity<CountRes> Count(){
+    public ResponseEntity<CountRes> Count(@RequestParam Map<String, String> params){
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(boardService.checkCount());
+            return ResponseEntity.status(HttpStatus.OK).body(boardService.checkCount(params));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

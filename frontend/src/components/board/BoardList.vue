@@ -19,17 +19,13 @@
       <b-button id="write-btn" @click="moveWrite">글쓰기</b-button>
     </div>
 
-    <!-- <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center">
       <b-button :disabled="page === 0" @click="prevPage">이전</b-button>
-      <b-button
-        v-for="pageNumber in 5"
-        :key="pageNumber"
-        @click="getboardList(this.type, this.word, pageNumber)"
-      >
-        {{ pageNumber }}
+      <b-button v-for="pageNum in 5" :key="pageNum" @click="getBoardList(page * 5 + pageNum - 1)">
+        {{ page * 5 + pageNum }}
       </b-button>
       <b-button :disabled="page === maxPage" @click="nextPage">다음</b-button>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -40,6 +36,7 @@ export default {
   data() {
     return {
       pageNumber: 1,
+      maxPage: 1,
       word: "",
       type: "제목",
       page: 0,
@@ -57,27 +54,33 @@ export default {
   },
 
   created() {
-    this.getBoardList("", "", 0);
-    this.getCount();
+    this.getBoardList(0);
+    this.getCount(this.type, this.word);
   },
 
   methods: {
-    getCount() {
+    getCount(type, word) {
       http
-        .get("/boards/count", {})
+        .get("/boards/count", {
+          params: {
+            type: type,
+            word: word,
+          },
+        })
         .then(({ data }) => {
           this.counts = data;
+          this.maxPage = Math.floor(this.counts.boardCount / 50);
         })
         .catch((error) => {
           console.error("GET 요청 에러 : ", error);
         });
     },
-    getBoardList(type, word, page) {
+    getBoardList(page) {
       http
         .get("/boards", {
           params: {
-            type: type,
-            word: word,
+            type: this.type,
+            word: this.word,
             page: page,
           },
         })
@@ -92,8 +95,8 @@ export default {
 
     searchBoardList() {
       this.page = 0;
-      console.log(this.type, this.word, this.page);
-      this.getBoardList(this.type, this.word, this.page);
+      this.getCount(this.type, this.word);
+      this.getBoardList(this.page);
     },
 
     moveDetail(item) {
@@ -104,9 +107,15 @@ export default {
       this.$router.push({ name: "boardWrite" });
     },
 
-    nextPage() {},
+    nextPage() {
+      this.page++;
+      this.getBoardList(this.page * 5);
+    },
 
-    prevPage() {},
+    prevPage() {
+      this.page--;
+      this.getBoardList(this.page * 5 + 4);
+    },
   },
 };
 </script>

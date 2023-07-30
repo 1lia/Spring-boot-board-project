@@ -16,5 +16,5 @@ public interface BoardService {
     BoardDetailRes selectDetailBoard(long boardId);
     Integer checkPassword(long BoardId , String password);
     void updateBoardLike(long boardId , int like);
-    CountRes checkCount();
+    CountRes checkCount(Map<String, String> params);
 }

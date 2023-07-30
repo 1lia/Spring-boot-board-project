@@ -27,7 +27,9 @@
           <b-form-input :id="'tag' + i" v-model="tags[i - 1]"></b-form-input>
         </b-col>
       </b-row>
-      <button type="submit" class="btn btn-primary">글 작성</button>
+      <div class="d-flex justify-content-end">
+        <button type="submit" class="btn btn-primary">글 작성</button>
+      </div>
     </form>
   </div>
 </template>

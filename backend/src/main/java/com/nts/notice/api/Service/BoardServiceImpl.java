@@ -134,9 +134,9 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public CountRes checkCount() {
-        long boardCount = boardRepository.count();
-        long commentCount = commentRepository.count();
+    public CountRes checkCount(Map<String, String> params) {
+        long boardCount = boardRepository.count(params);
+        long commentCount = commentRepository.count(params);
         return new CountRes(boardCount ,  commentCount);
     }
 

@@ -12,5 +12,5 @@ public interface BoardRepository {
     void save(Board board);
     void delete(Board board);
     List<Board> findAll(Map<String , String> params);
-    long count();
+    long count(Map<String , String> params);
 }
