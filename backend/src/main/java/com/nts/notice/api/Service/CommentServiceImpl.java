@@ -39,7 +39,7 @@ public class CommentServiceImpl implements CommentService{
                 .writer(commentReq.getWriter())
                 .password(password)
                 .board(board)
-                .text(commentReq.getComment())
+                .text(commentReq.getText())
                 .deleted(0)
                 .createTime(LocalDateTime.now())
                 .build();

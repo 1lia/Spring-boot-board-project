@@ -18,6 +18,18 @@
     <div class="d-flex justify-content-end">
       <b-button id="write-btn" @click="moveWrite">글쓰기</b-button>
     </div>
+
+    <!-- <div class="d-flex justify-content-center">
+      <b-button :disabled="page === 0" @click="prevPage">이전</b-button>
+      <b-button
+        v-for="pageNumber in 5"
+        :key="pageNumber"
+        @click="getboardList(this.type, this.word, pageNumber)"
+      >
+        {{ pageNumber }}
+      </b-button>
+      <b-button :disabled="page === maxPage" @click="nextPage">다음</b-button>
+    </div> -->
   </div>
 </template>
 
@@ -27,6 +39,7 @@ export default {
   name: "BoardList",
   data() {
     return {
+      pageNumber: 1,
       word: "",
       type: "제목",
       page: 0,
@@ -90,6 +103,10 @@ export default {
     moveWrite() {
       this.$router.push({ name: "boardWrite" });
     },
+
+    nextPage() {},
+
+    prevPage() {},
   },
 };
 </script>

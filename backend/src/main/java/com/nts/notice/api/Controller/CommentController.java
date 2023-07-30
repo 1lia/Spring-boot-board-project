@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/comments")
+@CrossOrigin("*")
 public class CommentController {
     private CommentService commentService;
 
@@ -42,7 +43,7 @@ public class CommentController {
     }
 
 //   댓글 조회
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<List<CommentRes>> selectComment(@RequestParam long boardId , @RequestParam int page){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(commentService.selectComment(boardId , page));

@@ -8,5 +8,5 @@ public class CommentReq {
     long boardId;
     String writer;
     String password;
-    String comment;
+    String text;
 }

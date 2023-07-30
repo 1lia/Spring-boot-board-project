@@ -35,26 +35,35 @@
     </form>
     <button v-if="check === 1" class="btn btn-danger" @click="deleteBoard">글 삭제</button>
     <button v-if="check === 0" class="btn btn-primary" @click="checkPassword">비밀번호 확인</button>
+    <comment-write :boardId="boardId" @getCommentList="getCommentList(boardId, 0)"></comment-write>
+    <comment-list :comments="comments"></comment-list>
   </div>
 </template>
 
 <script>
 import http from "@/util/http";
+import CommentWrite from "../comment/CommentWrite.vue";
+import CommentList from "@/components/comment/CommentList.vue";
 export default {
+  components: { CommentWrite, CommentList },
   name: "BoardDetail",
+
   data() {
     return {
+      commentPage: 0,
       tags: [],
       boardId: null,
       check: 0,
       password: null,
       board: {},
+      comments: [],
     };
   },
 
   created() {
     this.boardId = this.$route.params.boardId;
     this.getBoardDetail(this.boardId);
+    this.getCommentList(this.boardId, 0);
   },
 
   methods: {
@@ -123,6 +132,22 @@ export default {
           } else {
             alert("비밀번호가 틀렸습니다");
           }
+        })
+        .catch((error) => {
+          console.error("GET 요청 에러 : ", error);
+        });
+    },
+
+    getCommentList(boardId, page) {
+      http
+        .get("/comments", {
+          params: {
+            boardId: boardId,
+            page: page,
+          },
+        })
+        .then(({ data }) => {
+          this.comments = data;
         })
         .catch((error) => {
           console.error("GET 요청 에러 : ", error);

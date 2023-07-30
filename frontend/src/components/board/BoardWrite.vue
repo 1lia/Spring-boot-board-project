@@ -50,6 +50,11 @@ export default {
   },
   methods: {
     createBoard() {
+      if (!this.board.writer || !this.board.password || !this.board.title || !this.board.content) {
+        console.log(this.board);
+        alert("모든 필수 입력란을 채워주세요.");
+        return;
+      }
       this.board.tags = this.tags.filter((tag) => tag.trim() !== "");
       http
         .post("/boards", this.board)
