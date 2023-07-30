@@ -35,8 +35,9 @@
     </form>
     <button v-if="check === 1" class="btn btn-danger" @click="deleteBoard">글 삭제</button>
     <button v-if="check === 0" class="btn btn-primary" @click="checkPassword">비밀번호 확인</button>
-    <comment-write :boardId="boardId" @getCommentList="getCommentList(boardId, 0)"></comment-write>
-    <comment-list :comments="comments"></comment-list>
+    <comment-write :boardId="boardId" @getCommentList="getCommentList(boardId)"></comment-write>
+    <comment-list :comments="comments" @getCommentList="getCommentList(boardId)"></comment-list>
+    <b-button v-if="comments.length % 5 == 0" @click="getCommentListAdd(boardId)">더보기</b-button>
   </div>
 </template>
 
@@ -50,7 +51,7 @@ export default {
 
   data() {
     return {
-      commentPage: 0,
+      page: 0,
       tags: [],
       boardId: null,
       check: 0,
@@ -138,16 +139,35 @@ export default {
         });
     },
 
-    getCommentList(boardId, page) {
+    getCommentList(boardId) {
+      this.boardId = this.$route.params.boardId;
+      this.page = 0;
       http
         .get("/comments", {
           params: {
             boardId: boardId,
-            page: page,
+            page: 0,
           },
         })
         .then(({ data }) => {
           this.comments = data;
+        })
+        .catch((error) => {
+          console.error("GET 요청 에러 : ", error);
+        });
+    },
+    getCommentListAdd(boardId) {
+      this.boardId = this.$route.params.boardId;
+      this.page = this.page + 1;
+      http
+        .get("/comments", {
+          params: {
+            boardId: boardId,
+            page: this.page,
+          },
+        })
+        .then(({ data }) => {
+          this.comments = this.comments.concat(data);
         })
         .catch((error) => {
           console.error("GET 요청 에러 : ", error);

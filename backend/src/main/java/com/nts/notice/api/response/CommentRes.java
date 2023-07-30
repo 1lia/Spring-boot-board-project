@@ -12,4 +12,5 @@ public class CommentRes {
     String writer;
     String text;
     String createTime;
+    Integer deleted;
 }

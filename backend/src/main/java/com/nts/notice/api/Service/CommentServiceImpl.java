@@ -58,7 +58,7 @@ public class CommentServiceImpl implements CommentService{
         List<Comment> comments = commentRepository.findByBoardId(boardId , page);
         List<CommentRes> commentRes = new ArrayList<>();
         for (Comment comment : comments ) {
-            commentRes.add(new CommentRes(comment.getCommentId() , comment.getWriter() , comment.getText() , comment.getCreateTime().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))));
+            commentRes.add(new CommentRes(comment.getCommentId() , comment.getWriter() , comment.getText() , comment.getCreateTime().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)), comment.getDeleted()));
         }
         return commentRes;
     }

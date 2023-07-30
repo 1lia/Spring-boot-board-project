@@ -49,12 +49,13 @@ export default {
         alert("모든 입력란을 채워주세요.");
         return;
       }
-
+      console.log(this.comment);
       http
         .post("/comments", this.comment)
         .then(() => {
           alert("댓글 작성 완료");
           this.comment = {
+            boardId: this.comment.boardId,
             writer: "",
             password: "",
             text: "",
